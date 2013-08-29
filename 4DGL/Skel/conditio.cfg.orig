@@ -1,0 +1,4 @@
+# conditions: conditionID, condition ItemA, condition operator, conditionItemB
+# item: 
+0,0,==,1
+1,1,==,1

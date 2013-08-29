@@ -1,0 +1,117 @@
+#platform "GOLDELOX-GFX2"
+
+
+/#inherit "ICONS.Gc"
+#inherit "4DGL_16bitColours.fnc"
+#inherit "IPX800ts-translation.inc"
+#inherit "IPX800ts-config.lib"
+#inherit "IPX800ts-utils.lib"
+#inherit "IPX800ts-db.lib"
+#inherit "IPX800ts-control.lib"
+#inherit "IPX800ts-gui.lib"
+
+
+func main()
+    boot();
+    wPush(prepareWindow(-1));
+    aWindow(INITIALIZE);
+    var selected;
+    repeat
+     selected:=aWindow(SCAN);
+     if (selected > 0) onShortClick(selected-1,-1);
+//     if (selected < 0) onLongClick(ABS(selected)-1,-1);
+    forever
+endfunc
+
+func boot()
+    gfx_ScreenMode(LANDSCAPE);
+    touch_Set(TOUCH_ENABLE);
+    gfx_Set(TRANSPARENT_COLOUR,WHITE); // transparency works with WHITE
+
+    com_SetBaud(COM0,5760);
+    com_Init(rxBuf,99,0);
+    com_TXbuffer(txBuf, 40);    // sets the buffer location for buffered transmission
+    storeFunction:=storeRAMConfLine;
+
+    vect_base[0]:=configModel; vect_base[1]:=configView; vect_base[2]:=configControl;
+
+    confVectors[0]:=vect_base; confVectors[1]:=vect_boards; confVectors[2]:=vect_devices; confVectors[3]:=vect_windows;
+    confVectors[4]:=vect_conditions; confVectors[5]:= vect_scenarios; confVectors[6]:= vect_actions; confVectors[7]:= vect_widgets;
+
+    pokeW(TEXT_COLOUR,BLACK);
+    pokeW(TEXT_BACKGROUND,WHITE);
+    IMGhndl:= file_LoadImageControl("ICONS.DAT", "ICONS.GCI",0);             // use fast mode 1 for this type of work
+    img_Enable(IMGhndl, ALL);                        // first, disable all the images (ALL = -1), makes it easier to set up if we only need a few
+
+    var i;
+    for(i:=0; i<48; i++)
+        img(BG_GREY, 40*(i%8),40*(i/8),0);                   // set the checkout box position
+    next
+
+    gfx_Panel(PANEL_SUNKEN,40,60,240,120,WHITE);
+    var ypos:=82;
+    pokeW(TEXT_OPACITY, OPAQUE);
+    img(OFFICE_SMALL,40,ypos,0);
+    gfx_MoveTo(43,140);
+
+    putstr("Loading...");
+    var error:=0;
+    var mode:=0;
+    gfx_Set(TRANSPARENCY,ON);
+
+    while (mode<2)
+        i:=BASE_CFG;
+        while( i<=WIDGETS_CFG )
+            if (loadConfFile(i,mode))
+                img(OK,70+i*25,ypos,mode);//            ok_icon(46+i*25,ypos);
+            else
+                error:=1;
+                img(NO,70+i*25,ypos,0); //           no_icon(46+i*25,ypos);
+            endif
+            //pause(200);
+
+            i++;
+        wend
+
+        if (error)
+            pause(10000);
+            SystemReset();
+        endif
+
+        if (mode == 0)
+            i:=BOARDS_CFG;
+            while( i<=WIDGETS_CFG )
+                alloc(i++);
+            wend
+        endif
+        mode++;
+    wend
+
+    i:=0;
+
+    deviceBoard:=vect_devices[0]; deviceUsage:=vect_devices[2]; deviceIndex:=vect_devices[3]; deviceExtra:=vect_devices[4]; deviceName:=vect_devices[5];
+    boardIP:=vect_boards[0]; boardName:=vect_boards[1];
+    conditionItemA:=vect_conditions[0]; conditionOperator:=vect_conditions[1]; conditionItemB:=vect_conditions[2];
+    actionScenario:=vect_actions[0]; actionType:=vect_actions[1]; actionArg:=vect_actions[2]; actionCondition:=vect_actions[3];
+    windowIcon:=vect_windows[0]; windowName:=vect_windows[1];
+    widgetWindow:=vect_widgets[0]; widgetActType:=vect_widgets[1]; widgetActArg:=vect_widgets[2];
+    //scenarioIcon:=vect_scenarios[0];
+    scenarioCondition:=vect_scenarios[1]; scenarioName:=vect_scenarios[2];
+
+    deviceStatus:=mem_AllocZ(2*numVar[DEVICES_CFG]);
+
+    while (i< numVar[DEVICES_CFG])
+        deviceStatus[i++]:=-1;
+    wend
+
+    gfx_Set(TRANSPARENCY, OFF); // 0 = OFF, 1 = ON (only on displays with specific hware feature)
+
+    setTimer(TIMER0,500,dispatchScenarioAction);
+    sys_SetTimerEvent(TIMER2,screensaver); // set screensaver action
+    setTimer(TIMER4,configControl[TRIGGER_TEST_INTV]*1000,trigger);
+    setTimer(TIMER5,60000,pingArduino); // set action for screen offr
+    setTimer(TIMER7,200,parseStatus);
+
+    queueScenario(-'S',-1);
+endfunc
+

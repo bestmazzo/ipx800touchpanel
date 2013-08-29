@@ -1,0 +1,437 @@
+// colour scheme
+#CONST
+    WINDOW_COLOR        WHITE
+    STATUSBAR_COLOR     GRAY
+    STATUSTXT_COLOR     BLACK
+#END
+
+#constant MAXBUTTONS 12      // 12 iconed pushbuttons + exit buttun
+
+// enumeration for the window's sub functions
+#constant INITIALIZE, UPDATE, SCAN
+
+
+func windowUpdate()
+ aWindow(UPDATE);
+endfunc
+
+//
+func iconedButton(var vButtonID)
+//    var private icon:=-1;
+    var private text:=0;
+    var private id:=0;
+    var type, ID;
+    var private sensstr[6];
+    sensstr[0]:=0;
+    type:=aWindow.vButtonActType[vButtonID];
+    ID:=aWindow.vButtonActArg[vButtonID];
+    text:=nullstring;
+    if (type == WINDOW || type == BACK) // we're talking about windows..
+        if (ID == -SHUTTER)
+            text:=nullstring;
+            id:=SHUTTER_ICON;
+        else if (ID == -APPLIANCE)
+            text:=nullstring;
+            id:=PLUG_UNKNOWN;
+        else if (ID == -LIGHT)
+            text:=nullstring;
+            id:=LIGHT_UNKNOWN;
+        else if (ID == 254)
+            text:="Reboot";
+            id:=REFRESH;
+        else if (ID == 255)
+            text:="Save";
+            id:=SAVE;
+        else
+            text:=windowName[ID];
+            id:=windowIcon[ID];
+        endif
+    endif
+    if (type == DEVICE) // we're talking about devices
+        text:=deviceName[ID];
+        var devUsage, devStat, devExtra, calc, res;
+        devUsage:=deviceUsage[ID];
+        devStat:=deviceStatus[ID];
+        devExtra:=deviceExtra[ID];
+        if (devUsage == ALARM)
+                if (devStat == 0)
+                    id:=OK;       //                  ok_icon(x+16,y+16);
+                else if (devStat == 1)
+                    id:=STAT_ON;          //               staton_icon(x+16,y+16);
+                else if (devStat == -1)
+                    id:=STAT_UNKNOWN;    //                     statunknown_icon(x+16,y+16);
+                else
+                    id:=NO;       //                  no_icon(x+16,y+16);
+                endif
+
+        else if (devUsage == GENSTAT)
+            id:=STAT_UNKNOWN;
+            if ( devStat >=0) id:=devExtra+devStat;
+        else if (devUsage == LIGHT)
+            if (devExtra != 0)
+                 id:=devExtra+devStat;
+            else id:=LIGHT_OFF+(devStat);
+        else if (devUsage == APPLIANCE)
+            if (devExtra != 0)
+                id:=devExtra+devStat;
+            else id:=PLUG_OFF+devStat;
+        else if (devUsage == SHUTTER)
+            id:=SHUTTER_ICON;   // shutter_icon(x,y);
+        else if (devUsage == PULSE)
+            id:=PULSE_ICON;// pulse_icon(x,y);
+        else if (devUsage == BUTTON)
+            id:=BTN_OFF+devStat;
+        else // devices that need some calculation
+            to(sensstr);
+            if (devUsage == MEMHEAP)
+                id:=SENSORS;
+                devStat:=1;
+                putnum(DEC, mem_Heap());
+            else if (devUsage == TIME)
+                id:=DEVICE_ICON;
+                devStat:=1;
+#IFNOT USING DEBUG
+                print([DEC2Z] time[0], [CHR] ':',[DEC2Z] time[1], [CHR] ':',[DEC2Z] time[2]);
+#ENDIF
+            else if (devUsage == TEMP)
+                id:=TEMPERATURESENS; //         temperature_icon(x,y);
+                calc:=(devStat * 10 - 1551);
+                res:=(calc%31) *10;
+#IFNOT USING DEBUG
+                print( [CHR] ' ', [DEC2] calc/31, [CHR] '.', [DEC1] res/31 );
+#ENDIF
+            else if (devUsage == TEMPX)
+                id:=TEMPERATURESENS;//
+                calc:=(devStat * 33 - 16691 );
+                res:=(calc%333) *10;
+#IFNOT USING DEBUG
+                print( [CHR] ' ', [DEC2] calc/333, [CHR] '.', [DEC1] res/333);
+#ENDIF
+            else if (devUsage == LIGHTX)
+                id:=LIGHT_UNKNOWN;//
+                calc:=(devStat * 39 ) ;
+                res:=(calc%399) *10;
+#IFNOT USING DEBUG
+                print( [CHR] ' ', [DEC2] calc/399,[CHR] '.', [DEC1] res/399, [CHR] '%');
+#ENDIF
+            else if (devUsage == HUMID)
+                id:=HUMIDITYSENS;//         temperature_icon(x,y);
+                calc:=(devStat * 10 - 1551 ) / 65;
+#IFNOT USING DEBUG
+                print ([CHR] ' ', [DEC2] calc, [CHR] '%');
+#ENDIF
+            else if (devUsage == VOLTAGE)
+                id:=VOLTSENS;//         temperature_icon(x,y);
+                calc:=(devStat * deviceExtra[ID]);
+                res:=(calc%1024)*10;
+#IFNOT USING DEBUG
+                print( [CHR] ' ', [DEC] calc/1024, [CHR] '.', [DEC1] res/1024, [CHR] 'V' );
+#ENDIF
+            endif
+        endif
+        if (devStat < 0 ) sensstr[0]:=0;
+    //we're talking about scenarios
+    else if (type == SCENARIO)
+        if (ID < 0)
+            if (ID == -'d')
+                text:=SDOWN;
+                id:=DOWN_ICON;
+            else if (ID == -'u')
+                text:=SUP;
+                id:=UP_ICON;
+            else if (ID == -'t')
+                 text:=STOP;
+                id:=TOP_ICON;
+            else if (ID == -'b')
+                text:=SBOTTOM;
+                id:=BOTTOM_ICON;
+            endif
+        else
+            text:=scenarioName[ID];
+            id:=SCEN1;//   scenarios1_icon(x,y);
+        endif
+    endif
+
+endfunc
+
+func prepareWindow(var wID)
+    placeWindow(0,0,320,240,16,16,4,windowUpdate,configView[WIN_UPD_INTV],-1);
+
+//    if (wID <= -APPLIANCE && wID >= -122) // shutter list
+//         prepareButtons(DEVICES_CFG, D_USAGE, -wID,'d');
+//    else prepareButtons(WIDGETS_CFG, w_WINDOW, wID, 0);
+
+    if ( wID != 0 )
+        addButton(MAXBUTTONS-1, BACK, wPop());
+        wPush(aWindow.vButtonActArg[MAXBUTTONS-1]);
+    else
+
+    // add predefined link in main window
+        addButton(MAXBUTTONS-1,WINDOW,1);
+        wPush(wID);
+    endif
+
+   return wID;
+endfunc
+
+func addButton(var pos, var act, var arg)
+    aWindow.vButtonActType[pos]:=act;
+    aWindow.vButtonActArg[pos]:=arg;
+    aWindow.vButtonTouchable[pos]:=1;
+endfunc
+
+
+func prepareButtons(var wID, var forceActType)
+    var *searchRes; searchRes:=getConfVect(WINDOWS_CFG,W_WIDGETLIST,wID);
+    var resNum; resNum:=sizeof(searchRes);
+    var i:=0;
+
+    while (i<MAXBUTTONS && i<resNum)
+        if (i<resNum)
+            var curItem; curItem:=searchRes[i];
+            if ( forceActType != 0)
+                addButton(i,forceActType,LObyte(curItem));
+            else
+                addButton(i,HIbyte(curItem),LObyte(curItem));
+            endif
+        else
+            addButton(i,NONE,0);
+            aWindow.vButtonTouchable[i]:=0;
+        endif
+        i++;
+    wend
+endfunc
+
+func placeWindow(var x, var y, var w, var h, var xG, var yG, var grid, var tE, var tT, var dID)
+    aWindow.windowWidth:=w;
+    aWindow.windowHeight:=h;
+    aWindow.xpos := x;
+    aWindow.ypos := y;
+    aWindow.xgap :=xG;
+    aWindow.ygap :=yG;
+    aWindow.xgrid:=grid;
+    aWindow.timerEvent:=tE;
+    aWindow.timer:=tT;
+    aWindow.dID:=dID;
+
+endfunc
+
+func preparePopUp(var wID, var dID)
+    placeWindow(80,40,160,170,16,14,2,0,0,dID);
+
+//   prepareButtons(WINDOWS_CFG, W_WIDGETLIST, wID, 0);
+
+   return wID;
+endfunc
+
+// example for a simple Window object
+func aWindow(var subfunc)
+
+    // window properties
+    var private xpos, ypos;                         // window position
+    var private windowWidth;                 // default window width
+    var private windowHeight;                // default window height
+    var windowcolor := WINDOW_COLOR;        // default window colour
+
+    var textcolor := BLACK;                 // default text colour
+    var private xgap;                        // horizontal gap between buttons
+    var private ygap;                         // vertical gap between buttons
+    var private xgrid;
+    var private touchX1[MAXBUTTONS];                // touch regions for the buttons
+    var private touchY1[MAXBUTTONS];
+    var private touchX2[MAXBUTTONS];
+    var private touchY2[MAXBUTTONS];
+    var private vButtonActType[MAXBUTTONS];
+    var private vButtonActArg[MAXBUTTONS];
+    var private vButtonTouchable[MAXBUTTONS];
+   // var private vButtonText[MAXBUTTONS];
+    var private dID;
+    var private lastkey;                            // last button pressed
+    var private timerEvent;
+    var private timer;
+    var private touchState;                         // window touch status
+    var touchX;                             // window x position
+    var touchY;                             // window y position
+    var private touchEpoch;
+    // local variables
+    var n, r, retval;
+
+    txt_FontID(FONT1);
+
+    // functions methods
+    if (subfunc != SCAN)     sys_EventsPostpone();
+
+    gosub(subfunc), (Initialize, Update, Scan);
+
+    // restore things we changed
+    goto exitfunc;
+
+    //--------------------------------------------------
+    // reset the window and redraw the buttons to the up state
+    //--------------------------------------------------
+    Initialize:
+        //touch_Set(TOUCH_ENABLE); // enable the touch screen
+        //gfx_Cls();
+
+        n:=0;
+        while(n<MAXBUTTONS)
+            if (vButtonTouchable[n] != 0)
+                touchX1[n] := xpos + (64+xgap)*(n%xgrid)+ xgap/4;
+                touchY1[n] := ypos + (64+ygap)*(n/xgrid);                                  // set the position of the first button offset in the window
+                touchX2[n] := touchX1[n]+64;
+                touchY2[n] := touchY1[n]+64;
+            endif
+            n++;
+        wend
+
+        gfx_Panel(PANEL_RAISED, xpos, ypos, windowWidth, windowHeight, windowcolor);        // draw main window panel
+
+        gosub Update;
+
+        /*
+        Do any other initializions here
+        */
+        screenOn();
+
+        endsub;
+
+    //--------------------------------------------------
+    // Update any buttons that have changed state
+    //--------------------------------------------------
+    Update:
+
+         pokeW(TEXT_COLOUR,textcolor);
+         pokeW(TEXT_BACKGROUND,windowcolor);
+
+         n:=0;
+         while(n<MAXBUTTONS)
+            if ( vButtonTouchable[n] != 0)
+                iconedButton(n);
+                img(iconedButton.id,touchX1[n],touchY1[n],0);
+                gfx_MoveTo(touchX1[n],touchY2[n]);
+                putstr(iconedButton.text);
+                putstr(iconedButton.sensstr);
+            endif
+            n++;
+        wend
+
+        /*
+        Do any other update operations here....
+        */
+        sys_SetTimer(TIMER1,timer);
+        sys_EventsResume();
+
+
+    endsub;
+
+    //--------------------------------------------------
+    // scan for any button presses
+    //--------------------------------------------------
+    Scan:
+    touchState := touch_Get(TOUCH_STATUS);                  // save touchscreen status
+    touchX := touch_Get(TOUCH_GETX);                        // and current position
+    touchY := touch_Get(TOUCH_GETY);
+
+    // if screen touched,
+    if(touchState == TOUCH_PRESSED)
+        if (screenSaverActive > 0)
+            gosub Initialize;
+        else
+            screenOn();
+
+        // scan the hot spots list
+            while (n < MAXBUTTONS && !r)
+                if (vButtonTouchable[n] != 0)
+                    if (touchX >= touchX1[n] && touchX < touchX2[n] && touchY >= touchY1[n] && touchY < touchY2[n]) r := n+1;
+                endif
+                n++;
+            wend
+
+            // if any button was pressed
+            if(r)
+                lastkey := r;                                   // remeber the button
+                iconedButton(r-1);
+                img(iconedButton.id,touchX1[r-1],touchY1[r-1],-1);
+
+                touchEpoch:=sys_T();
+            endif
+        endif
+    else
+    if((touchState == TOUCH_RELEASED) && lastkey)           // if touch released and we remember a previous button press,
+        if (touchEpoch + 2000 < sys_T())
+            retval:=-lastkey;
+        else retval := lastkey;                                  // set return value with the button number
+
+        lastkey := 0;                                       // clear button memory
+        endif
+    endif
+    endsub;
+
+exitfunc:
+    return retval;
+endfunc
+
+// call some asynchronous action OR draw another window
+// defaultUsage == 1 ? then execute actions using curItem as argument.
+func onShortClick(var vButtonID, var dID)
+    var actType, id;
+    actType:=aWindow.vButtonActType[vButtonID];
+    id:=aWindow.vButtonActArg[vButtonID];
+    if (actType==DEVICE)
+        var devUsage;
+        devUsage:=deviceUsage[id];
+        if (devUsage ==LIGHT || devUsage ==APPLIANCE)
+            queueScenario(-'2',id); // switch device
+        else if (devUsage == PULSE)
+            queueScenario(-'p',id); // pulse device
+        else if  (devUsage ==SHUTTER)
+                        preparePopUp(-SHUTTER,id);
+                        aWindow(INITIALIZE);
+
+                        var selected;
+                        repeat
+                            selected:=aWindow(SCAN);
+                            if (selected)
+                                onShortClick(ABS(selected)-1,aWindow.dID);
+                                break;
+                            endif
+                        forever
+                        // restore previuos Window
+                        prepareWindow(wPop());
+                        aWindow(INITIALIZE);
+        else if ( devUsage == GENSTAT)
+            if (deviceExtra[id]) queueScenario(-'2',id); // device index = 1 means: writable by user.
+        endif
+    else
+        if (actType==WINDOW)
+        // insert here specific windows behaviour
+            if (id == -114) reboot();   // reboot
+            if (id == -83)  putConfig();           //saveconfig
+
+            wPush(prepareWindow(id));
+            aWindow(INITIALIZE);
+        else if (actType==SCENARIO)
+               queueScenario(id, dID);
+        else if (actType == BACK )
+                    wPop();
+                    prepareWindow(wPop());
+                    aWindow(INITIALIZE);
+        endif
+
+    endif
+endfunc
+
+func onLongClick(var vButtonID, var dID)
+    var actType, id;
+    actType:=aWindow.vButtonActType[vButtonID];
+    id:=aWindow.vButtonActArg[vButtonID];
+/*    if (actType==DEVICE)
+    endif
+    if (actType==WINDOW)
+    endif
+    if (actType==SCENARIO)
+    endif
+    if (actType == BACK )
+    endif */
+endfunc
+

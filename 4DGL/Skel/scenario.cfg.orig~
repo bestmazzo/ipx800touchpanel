@@ -1,0 +1,7 @@
+# ID,type,condition,  icon, conditionID, Name #Comments
+# actions: Up, Down, Top, Bottom, Scenario, Wait, Zero (turn off), One (turn on), Turn (switch)
+0,p,1,0,Test,1z3,1z3,1w30
+
+
+
+

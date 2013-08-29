@@ -1,0 +1,421 @@
+#constant BASE_CFG, BOARDS_CFG, DEVICES_CFG, WINDOWS_CFG, CONDITIONS_CFG, SCENARIOS_CFG, ARDUINO_CFG
+
+// device types
+#constant RELAY, ANALOG, DIGITAL, COUNTER
+
+var nullstring:="";
+
+// device usages
+#CONST
+    APPLIANCE   'a'
+    BUTTON      'b'
+    HUMID       'h'
+    LIGHT       'l'
+    OTHER       'o'
+    PULSE       'p'
+    SHUTTER     's'
+    TEMP        't'
+    ALARM       'A'
+    DATE        'D'
+    GENSTAT     'G'
+    TIME        'H'
+    LIGHTX      'L'
+    MEMHEAP     'M'
+    TEMPX       'T'
+    VOLTAGE     'V'
+#END
+
+var txBuf[20];
+var rxBuf[45];
+
+#constant WINDOW_PATH 3
+var wPath[WINDOW_PATH];
+var wPathNum:=0;
+
+
+// usage PUSH 1;
+func wPush(var wID)
+ if (wPathNum < WINDOW_PATH )
+    wPath[wPathNum++]:=wID;
+ else return-1;
+ return 0;
+endfunc
+
+// usage a:=POP;
+func wPop()
+    if (wPathNum > 0)
+        return wPath[--wPathNum];
+    else return wPath[wPathNum];
+endfunc
+
+var time[3]; // hour, minutes, seconds
+var *date; // year, month, day, dow
+
+var numVar[9]:=[0,0,0,0,0,0,0,0,0];
+
+
+
+// tables
+#constant  SYSTEM_TBL, BOARD_TBL, DEVICE_TBL, WINDOW_TBL, CONDITION_TBL, SCENARIO_TBL
+
+// field type
+#constant  NUMBER, STRING, CHAR, WORD, IP, SKIP, CHARNUM, NULLSTRING, ncnLIST, UNUMBER, ncLIST
+
+#DATA
+    byte dataLen 2,2,1,2,4,0,2,2,2,1,2
+#END
+
+// system fieldsindex
+#constant SYS_ROWS, SYS_COLUMNS
+// board fields index
+#constant B_IP, B_NAME
+// device fields index
+#constant D_BOARD, D_USAGE, D_AIDX, D_BIDX, D_NAME
+// window fields index
+#constant W_ICON, W_NAME, W_WIDGETLIST
+// condition fields index
+#constant C_aITEM, C_OPERATOR, C_bITEM
+// scenario fields index
+#constant S_ICON, S_CONF, S_NAME, S_ACTLIST
+// widget fields index
+//#constant w_WINDOW, w_ACTTYPE, w_ACTARG
+
+func getType(var tab, var col)
+// system rownums
+    var tbl_system_types[2]:=[ NUMBER, NUMBER];
+    // board IP, board Name
+    var tbl_board_types[2]:=[ IP, NULLSTRING];
+    // dev board, dev type, dev usage, dev Aindex, dev Bindex, dev name
+    var tbl_device_types[5]:=[ NUMBER, CHAR, NUMBER, NUMBER, STRING];
+    // window Name, window Icon
+    var tbl_window_types[3]:=[ NUMBER, STRING, ncLIST];
+    // condition
+    var tbl_condition_types[3]:=[ CHARNUM, WORD, CHARNUM];
+    // scenario icon, type + condition, name, action list
+    var tbl_scenario_types[4]:=[ SKIP, CHARNUM, STRING, ncnLIST];
+
+    var tbl_types[6];
+    tbl_types[0]:=tbl_system_types;
+    tbl_types[1]:=tbl_board_types;
+    tbl_types[2]:=tbl_device_types;
+    tbl_types[3]:=tbl_window_types;
+    tbl_types[4]:=tbl_condition_types;
+    tbl_types[5]:=tbl_scenario_types;
+
+    var *a;
+    a:=tbl_types[tab];
+    return a[col];
+endfunc
+
+
+#DATA
+//    word readSize
+//        18, 5
+    word confContainsID
+        0,1,1,1,1,1
+#END
+
+//var *boardIP, *boardName;
+var *deviceBoard,*deviceUsage,*deviceIndex,*deviceExtra,*deviceName,*deviceStatus;
+var *windowName, *windowIcon, *windowWidgetList;
+var *scenarioIcon, *scenarioName, *scenarioConf, *scenarioActList;
+var *conditionItemA,*conditionOperator,*conditionItemB;
+
+
+//var wIcons:=0; // handle for extra windows icons file
+//var sIcons:=0; // handle for extra scenarios icons file
+
+// config model parameters
+
+var configModel[1];
+var configView[4];
+var configControl[4];
+
+#constant SCRSAVER_TIMEOUT, SCRSAVER_UPD_INTV, SLEEP_TIMEOUT, WIN_UPD_INTV
+#constant ARDUINOPING_INTV, ACTION_DISPATCH_INTV, STATUS_PARSE_INTV, TRIGGER_TEST_INTV
+
+var vect_base[3]; //:=[configModel,configView,configControl];
+var vect_boards[2];
+var vect_devices[5];
+var vect_windows[3];
+var vect_conditions[3];
+var vect_scenarios[4];
+//var vect_widgets[3];
+
+var vect_size[6]:=[3,2,5,3,3,4];
+
+var confVectors[6]; //:=[vect_base,vect_boards,vect_devices,vect_windows,vect_conditions,vect_scenarios];
+
+
+func getConfArray(var table, var col)
+
+    var * i;
+    i:=confVectors[table];
+    if (col >= vect_size[table])
+        return -1;
+    else return i[col];
+endfunc
+
+func getData(var table, var col, var id)
+    var array; array:=getConfArray(table,col);
+    var type; type:=getType(table,col);
+    var ptr;
+    var dataSize; dataSize:=dataLen[type];
+    if (dataSize == 1)
+        ptr:=str_Ptr(array);
+        return str_GetByte(ptr+(dataSize*id));
+    else if (dataSize == 2)
+        return array[id];
+    else return -1;
+endfunc
+
+func setData(var table, var col, var id, var val)
+    var array; array:=getConfArray(table,col);
+    var type; type:=getType(table,col);
+    var ptr;
+    var dataSize; dataSize:=dataLen[type];
+    if (dataSize == 1)
+        ptr:=str_Ptr(array);
+        str_PutByte(ptr+(dataSize*id), val);
+    else if (dataSize == 2)
+        array[id] = val;
+    else return -1;
+
+endfunc
+
+var *storeFunction:=0;
+
+#IF USING ARDUINO
+func loadArduinoConfig(var line)
+    to(COM0); print("set(",[STR] line,")\n");
+    while(com_TXcount());
+
+endfunc
+#ENDIF
+
+func loadBaseConfig(var line)
+    var linePtr, cat, idx;
+    var *cfgArray;
+    linePtr:=str_Ptr(line);
+    if (str_GetWZ(&linePtr,&cat)) // get category
+        linePtr++;
+        cfgArray:=getConfArray(BASE_CFG, cat);
+        if (str_GetWZ(&linePtr,&idx)) // get idx
+            linePtr++;
+            str_GetWZ(&linePtr,&cfgArray[idx]); // save data
+        endif
+    endif
+endfunc
+
+
+func storeRAMConfLine(var tableID, var line, var rowNum)
+    var ptr; ptr:=str_Ptr(line);
+    var i:=0;
+    var j;
+    var id;
+
+    // get current row id
+    if(confContainsID[tableID])
+        str_GetWZ(&ptr,&id);
+        ptr++;
+    else
+        id:=rowNum;
+    endif
+    var *vect;
+    var colType,pippo,tmp;
+    while(getConfArray(tableID,i) >= 0)
+         pippo:=0; tmp:=0;
+         colType:=getType(tableID,i);
+         vect:=getConfArray(tableID,i);
+         if (colType == NUMBER)
+            str_GetWZ(&ptr,&vect[id]);
+         else if (colType == CHAR)
+            vect[id]:=str_GetByte(ptr++);
+         else if (colType == UNUMBER)
+            str_GetWZ(&ptr,&tmp);
+            pippo:=str_Ptr(vect[id]);
+            str_PutByte(pippo+id,tmp);
+         else if (colType == CHARNUM)
+            if (! str_GetWZ(&ptr,&pippo)) // only number
+                tmp:=str_GetByte(ptr++);
+                str_GetWZ(&ptr,&pippo);
+            endif
+            vect[id]:=tmp << 8 + pippo;
+        else if (colType == STRING)
+            vect[id]:=mem_AllocZ(str_Length(ptr)+1);
+            tmp:= str_Ptr(vect[id]); // gets Name
+            while ((str_GetByte(ptr) != ',') && str_Length(ptr))
+               str_PutByte(tmp++, str_GetByte(ptr++));
+            wend
+            str_PutByte(tmp, 0x00);
+         else if (colType == WORD)
+            vect[id]:= str_GetWord(ptr++); ptr++;
+         else if (colType == IP)
+            j:=0;
+            while(j<2) // gets IP
+                str_GetWZ(&ptr,&tmp); ptr++;
+                str_GetWZ(&ptr,&pippo); ptr++;
+                vect[id*2+j]:=tmp <<8 + pippo;
+                j++;
+           wend
+           ptr--;
+        else if (colType == ncnLIST)
+            //conta il numero di , nella stringa
+            tmp:=ptr;
+            pippo:=1;
+            while (str_Length(tmp))
+                if (str_GetByte(tmp++) == ',') pippo++;
+            wend
+            //alloca 4*numero di virgole
+            vect[id]:=mem_AllocZ(4*pippo);
+            // riempi la lista
+            tmp:=str_Ptr(vect[id]);
+            while (pippo)
+                str_GetWZ(&ptr,&j); str_PutByte(tmp++,j); //action condition
+                str_PutByte(tmp++, str_GetByte(ptr++));   // action type
+                str_GetWZ(&ptr,&j); str_PutWord(tmp,j);   // action argument (2bytes)
+                pippo--;
+            wend
+            else if (colType == ncLIST)
+            //conta il numero di , nella stringa
+            tmp:=ptr;
+            pippo:=1;
+            while (str_Length(tmp))
+                if (str_GetByte(tmp++) == ',') pippo++;
+            wend
+            //alloca 2*numero di virgole
+            vect[id]:=mem_AllocZ(2*pippo);
+            // riempi la lista
+            tmp:=str_Ptr(vect[id]);
+            while (pippo)
+                str_PutByte(tmp++, str_GetByte(ptr++));   // action type
+                str_GetWZ(&ptr,&j); str_PutByte(tmp,j);   // action argument
+                pippo--;
+            wend
+        else if (colType == SKIP || colType == NULLSTRING)
+            while ((str_GetByte(ptr) != ',') && str_Length(ptr))
+                ptr++;
+            wend
+            if (colType == NULLSTRING) vect[id]:=nullstring;
+        endif
+        ptr++;
+        i++;
+    wend
+endfunc
+
+func loadConfFile(var name,var mode)
+  var confh;
+  var conffiles[7];
+    conffiles[0]:="base.cfg";
+    conffiles[1]:="board.cfg";
+    conffiles[2]:="device.cfg";
+    conffiles[3]:="window.cfg";
+    conffiles[4]:="conditio.cfg";
+    conffiles[5]:="scenario.cfg";
+#IF USING ARDUINO
+    conffiles[6]:="arduino.cfg";
+#ENDIF
+//  print ("Loading ", [STR] conffiles[name]);
+  var lines:=0;
+  var t, chr:=0;
+  var lstchr:=0;
+  var confl[60];
+  var p;
+  var pos:=0;
+  var comment:=0;
+if (file_Exists(conffiles[name]))
+        confh := file_Open(conffiles[name],'r');
+        while (! file_Error())
+            comment:=0;
+            //t:=file_GetS(confl, 100, confh); // reads a line from the file
+            if ( t:=file_GetS(confl, 119, confh) == 0)
+                if (file_Error())
+                    break;
+                else continue;
+            endif
+            p:=str_Ptr(confl);
+            while(str_Length(p))
+                lstchr:= str_GetByte(p);
+                if (lstchr == '#') comment:=1;
+                if (lstchr == '_') lstchr:='\n';
+                if (comment == 1 ) lstchr:=0;
+                str_PutByte(p++,lstchr);
+            wend
+            str_PutByte(p,0x00);
+            p:=str_Ptr(confl);
+            if( str_Length(p) > 3)
+                if (mode == 1)
+                    if (name == BASE_CFG)
+                        loadBaseConfig(confl);
+                    else if (name == ARDUINO_CFG)
+                        loadArduinoConfig(confl);
+                    else storeFunction(name, confl, lines);
+                endif
+                lines++;
+            endif
+          wend
+        file_Close(confh);
+    endif
+    numVar[name]:=lines;
+    return lines;
+endfunc
+
+func str_GetWZ(var srcaddr, var dstaddr)
+ var src; src:=*srcaddr;
+ var chr;
+ chr:=str_GetWord(src);
+ if (LObyte(chr) == '0')
+    if (isalnum(HIbyte(chr))) // 0x123, 0b0100011, 0AW
+        return str_GetW(srcaddr,dstaddr);
+     else // "0," , "0 ", etc
+         *dstaddr:=0;
+        (*srcaddr)++;
+        return 1;
+    endif
+ else // 123, asr3, g4d etc
+    return str_GetW(srcaddr,dstaddr);
+ endif
+endfunc
+
+#IF USING TOUCH
+func touchMSG(var msg)
+    // wait forever until we get a touch
+    var lastColor; lastColor:= peekW(TEXT_COLOUR);
+    pokeW(TEXT_COLOUR,RED);
+    print(" mem: ", [DEC] mem_Heap(),[STR] msg);
+    pokeW(TEXT_COLOUR,lastColor);
+    touch();
+endfunc
+
+func touch()
+    repeat
+        if(touch_Get(TOUCH_STATUS) == TOUCH_PRESSED) break;                    // if there's a press exit
+    forever
+endfunc
+#ENDIF
+
+func alloc(var name)
+    var *array;
+    var all, ok:=1;
+    var j:=0;
+    var lines; lines:=numVar[name];
+    var type;
+    array:=confVectors[name];
+    while( j < vect_size[name])
+        type:=getType(name,j);
+        if (type == IP)
+            all:=lines*4;
+        else if (type == UNUMBER)
+            all:=lines;
+        else all:=lines*2;
+        if ( type != SKIP)
+            array[j] := mem_AllocZ(all);
+            if ( array[j] == 0)
+                ok:=0;
+            endif
+          //  print([DEC] name,[CHR] ',', [DEC] j,[CHR] '@', [DEC] array[j],[CHR] '#',[DEC] alloc,[CHR] '\n'); touchMSG("");
+        endif
+        j++;
+    wend
+endfunc
+

@@ -1,0 +1,56 @@
+linked : 56    boot 0062
+linked : 55    main 033C
+skipped: 54    onLongClick ----
+linked : 53    onShortClick 03B8
+linked : 52    aWindow 0502
+linked : 51    preparePopUp 0778
+linked : 50    placeWindow 0795
+skipped: 49    prepareButtons ----
+linked : 48    addButton 07D2
+linked : 47    prepareWindow 07EE
+linked : 46    iconedButton 0851
+linked : 45    windowUpdate 0D05
+linked : 44    updateDevice 0D0E
+linked : 43    parseStatusLine 0DE7
+linked : 42    parseStatus 0EA9
+linked : 41    testCondition 0F14
+linked : 40    controlRelay 10AA
+linked : 39    controlDev 110A
+linked : 38    search 111F
+linked : 37    executeAction 116F
+linked : 36    dispatchAction 12B7
+linked : 35    dispatchQueueActions 1384
+linked : 34    dispatchMainQueueActions 1426
+linked : 33    getALitem 143B
+linked : 32    setALitem 148A
+linked : 31    queueGenScenario 14DE
+linked : 30    queueScenario 1558
+linked : 29    setQactPos 1568
+linked : 28    getQactPos 15A6
+linked : 27    setQdata 15C7
+linked : 26    getQdata 15FB
+linked : 25    createQueue 1680
+linked : 24    img 16A7
+linked : 23    trigger 16EA
+linked : 22    screensaver 1711
+linked : 21    reboot 17D8
+linked : 20    pingArduino 17F2
+linked : 19    putConfig 1822
+linked : 18    screenOn 19BC
+linked : 17    arduinoReboot 19E7
+linked : 16    sleepMode 1A1B
+linked : 15    setTimer 1A26
+linked : 14    alloc 1A3B
+linked : 13    touch 1AD4
+linked : 12    touchMSG 1AE8
+linked : 11    str_GetWZ 1B36
+linked : 10    loadConfFile 1B8B
+linked : 9     storeRAMConfLine 1D45
+linked : 8     loadBaseConfig 209C
+linked : 7     loadArduinoConfig 20E2
+skipped: 6     setData ----
+skipped: 5     getData ----
+linked : 4     getConfArray 2119
+linked : 3     getType 213D
+linked : 2     wPop 21AA
+linked : 1     wPush 21C4

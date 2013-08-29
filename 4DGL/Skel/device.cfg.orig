@@ -1,0 +1,13 @@
+#ID,boardID,type,usage,index,extra, name
+# usage: Light Appliance Shutter Temp Button Pulse
+0,0,0,l,1,,Faretti_Sala
+1,0,0,l,2,,Router
+2,0,0,s,8,7,Cucina
+3,0,1,a,3,,Coffe
+4,0,0,l,4,,Luce#Scale
+5,0,0,l,5,,Centro_Salotto
+6,0,0,l,6,,Salotto
+7,0,0,a,1,,Sens 1
+8,0,0,a,2,,Sens2
+9,-1,0,G,,,Status Variable
+10,-1,0,a,,,Alarm

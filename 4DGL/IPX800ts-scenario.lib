@@ -1,0 +1,218 @@
+var *baseQueue;
+
+// q_ACTIVEPOS= 16bit,q_CURITEM = 1byte, q_SCENARIO = 2byte
+#CONST
+     q_CURITEM, q_FORCEDEV, q_ACTIVEPOS, nonea, q_sTYPE, q_sCONDITION, q_sACTLIST,
+     q_SCENARIO := 4
+     al_CONDITION, al_TYPE, al_ARG
+#END
+
+func createQueue(var sID)
+// alloca memoria
+    var tmp; tmp:= mem_AllocZ(5);
+// collega scenario
+    setQdata(tmp,q_SCENARIO,sID);
+// inizializza posizioni
+    setQdata(tmp,q_ACTIVEPOS,0b1111111111111111);
+    return tmp;
+endfunc
+
+func getQdata(var *queue, var item)
+    var ptr; ptr:=str_Ptr(queue);
+    var tmp;
+    ptr:=ptr+item;
+    if (item == q_CURITEM  || item == q_FORCEDEV)
+        return str_GetByte(ptr);
+    else if (item == q_ACTIVEPOS )
+        return str_GetWord(ptr);
+    else
+        tmp:=str_GetByte(ptr);
+
+        if (item == q_sTYPE)
+            return HIbyte(scenarioConf[tmp]);
+        else if (item == q_sCONDITION)
+            return LObyte(scenarioConf[tmp]);
+        else return scenarioActList[tmp];
+    endif
+endfunc
+
+// item: q_CURITEM, q_ACTIVEPOS, q_SCENARIO
+func setQdata(var *queue, var item, var dat)
+    var ptr; ptr:=str_Ptr(queue);
+    ptr:=ptr+item;
+    if (item == q_ACTIVEPOS)
+        str_PutWord(ptr,dat);
+    else str_PutByte(ptr,dat);
+endfunc
+
+// gets status of a queue's specific position
+func getQactPos(var queue, var pos)
+    var i; i:=getQdata(queue,q_ACTIVEPOS);
+    if ( i & (1<<pos))
+        return 1;
+    else return 0;
+endfunc
+
+func setQactPos(var queue, var pos, var val)
+    var i; i:=getQdata(queue,q_ACTIVEPOS);
+    if (val)
+        i |= (1 <<pos);
+    else
+        i &= ~(1<<pos);
+    endif
+    setQdata(queue, q_ACTIVEPOS, i);
+endfunc
+
+func queueScenario(var sID, var dID)
+    queueGenScenario(baseQueue, sID, dID,-1 );
+endfunc
+
+func queueGenScenario(var baseQ, var sID, var dID, var where)
+ var pos:=where;
+ if (where == -1) // selezione automatica della posizione dove inserire la coda
+// trova prima posizione non attiva (libera) ovv. =0
+    pos:=0;
+    while(pos<16)
+        if (getQactPos(baseQ, pos)) break;
+        pos++;
+    wend
+ endif
+// alloca ed inizializza coda
+    var newQueue;
+    newQueue:=createQueue(sID);
+// TODO:    setQData(newQueue,q_FORCEDEV,
+
+//aggiungi a coda principale
+    if (testCondition(getQdata(newQueue, q_sCONDITION)))
+
+        setALitem(baseQ, pos, al_CONDITION, 1); // if condition is tested, set condition to 1
+        setALitem(baseQ, pos, al_TYPE, 'j');    // a scenario call is transformed into a action of type Jump
+        setALitem(baseQ, pos, al_ARG, newQueue); // the argument of the Jump action is the address of subQueue - IT SHOULD BE 2bytes long....
+    endif
+endfunc
+
+// item in al_CONDITION, al_TYPE, al_ARG
+func setALitem(var *queue, var aID, var item, var val)
+    // estrai la lista azioni
+    var curScen; curScen:= getQdata(queue,q_SCENARIO);
+    var *curAL; curAL:=scenarioActList[curScen];
+    // modifica la posizione in tmpAA
+    var ptr; ptr:=str_Ptr(curAL);
+    if (item == al_ARG)
+        str_PutWord(ptr+(aID*3)+item,val);
+    else str_PutByte(ptr+(aID*3)+item,val);
+endfunc
+
+func getALitem(var *queue, var aID, var item)
+    // estrai la lista azioni
+    var curScen; curScen:= getQdata(queue,q_SCENARIO);
+    var *curAL; curAL:=scenarioActList[curScen];
+    // modifica la posizione in tmpAA
+    var ptr; ptr:=str_Ptr(curAL);
+    if (item == al_ARG)
+        return str_GetWord(ptr+(aID*3)+item);
+    else return str_GetByte(ptr+(aID*3)+item);
+endfunc
+
+func dispatchMainQueueActions()
+    sys_EventsPostpone();
+    dispatchQueueActions(baseQueue);
+    sys_EventsResume();
+endfunc
+
+func dispatchQueueActions(var queue)
+// controlla il tipo di coda cui stiamo accedendo (parallela o seriale)
+    var qT; qT:=getQdata(queue,q_sTYPE);
+    var i:=0;
+    if(qT == 'p')
+// caso parallelo
+//  scorri ogni posizione della coda principale
+//      se la posizione è attiva, esegui l'azione contenuta
+        while(i<16)
+            if (getQactPos(queue,i)) // posizione attiva
+                 dispatchAction(queue, i);
+            endif
+            i++;
+        wend
+    else
+// caso seriale
+//  trova posizione corrente
+//  se la posizione è attiva
+//      esegui l'azione contenuta
+//  aggiorna
+        var curAct; curAct:=getQdata(queue,q_CURITEM);
+        if(getQactPos(queue,curAct))
+            if (dispatchAction(queue,curAct++)) setQdata(queue,q_CURITEM,curAct%16);
+        endif
+    endif
+// controlla se la coda ha almeno una posizione attiva, altrimenti rimuovila
+    if (queue != baseQueue && getQdata(queue,q_ACTIVEPOS) == 0 )
+        mem_Free(queue);
+        return 1;
+    else return 0;
+endfunc
+
+// dispatches a single action
+func dispatchAction(var queue, var pos)
+    var cond; cond:=getALitem(queue,pos,al_CONDITION);
+    var aT; aT:=getALitem(queue,pos,al_TYPE);
+    var aA; aA:=getALitem(queue,pos,al_ARG);
+    var cleanup:=0;
+    if (testCondition(cond))
+        if (aT == 's')
+            queueGenScenario(queue, aA, -1, pos); //explode scenario
+            aT:='j';
+            aA:=getALitem(queue,pos,al_ARG); // re.extract data
+            // TODO: scenario condition isn't evaluated
+        else if (aT == 'w')
+         // TODO: decrease wait interval
+            cleanup:=(aA <= 0);
+        endif
+
+        if (aT == 'j') // jump to a subqueue
+            cleanup:=dispatchQueueActions(aA);
+        else if (aT == 'b' || aT == 't' )
+//            queueGenScenario(queue, -aT, aA, pos);
+        else
+            executeAction(aT,aA); // just execute a simple action
+            cleanup:=1;
+        endif
+    endif
+    if (cleanup) setQactPos(queue, pos, 0); // set position as inactive
+    return cleanup;
+endfunc
+
+func executeAction(var action, var arg)
+    var dEX, dBD, dU;
+    dEX:=deviceExtra[arg]; dBD:=deviceBoard[arg];
+    dU:=deviceUsage[arg];
+    if (action == 'd') // down -> pulse HI(deviceIndex[arg])
+        controlRelay(dBD, dEX, PULSERELAY);
+    else if (action == 'D') // turn on
+        controlRelay(dBD, dEX, TURNONRELAY);
+    else if  (action == 'p' || action == 'u') // up    -> pulse LO(deviceIndex[arg])
+        controlDev(arg, PULSERELAY);
+    else if (action == '-') // turn off
+        if (dU == GENSTAT || dU==ALARM)
+            deviceStatus[arg]:=0;
+        else
+            controlDev(arg, TURNOFFRELAY);
+            if (dU == SHUTTER) controlRelay(dBD, dEX, TURNOFFRELAY);
+        endif
+    else if (action == '+' || action == 'U') // turn on
+        if (dU == GENSTAT || dU==ALARM)
+            deviceStatus[arg]:=1;
+        else
+            controlDev(arg, TURNONRELAY);
+        endif
+    else if (action == '^') // switch
+        if (dU == GENSTAT )
+            deviceStatus[arg]:=1-deviceStatus[arg];
+        else if (dU == ALARM )
+            deviceStatus[arg]:=2;
+        else if (dU == LIGHT || dU == APPLIANCE )
+            controlDev(arg, SWITCHRELAY);
+        endif
+    endif
+endfunc
+

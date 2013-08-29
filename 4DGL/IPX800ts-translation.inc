@@ -1,0 +1,10 @@
+
+#CONST
+
+MAINWINDOWNAME "Home"
+CONFIGWINDOWNAME "Setup"
+SUP "Up"
+SDOWN "Down"
+STOP "Top"
+SBOTTOM "Bottom"
+#END

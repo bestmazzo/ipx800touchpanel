@@ -1,0 +1,165 @@
+
+// tables
+
+#IF USING DB
+
+#DATA
+    byte tbl_system_colOffsets 10,0,5
+    byte tbl_board_colOffsets 36,0,18
+    byte tbl_device_colOffsets 43,0,5,10,15,20,25
+    byte tbl_window_colOffsets 24,0,18
+    byte tbl_condition_colOffsets 25,0,5,10,15,20
+    byte tbl_scenario_colOffsets 26,0,5,21
+    byte tbl_action_colOffsets 20,0,5,10,15
+    byte tbl_widget_colOffsets 15,0,5,10
+    word tbl_colOffsets tbl_system_colOffsets, tbl_board_colOffsets, tbl_device_colOffsets, tbl_window_colOffsets, tbl_condition_colOffsets, tbl_scenario_colOffsets, tbl_action_colOffsets, tbl_widget_colOffsets
+
+#END
+
+var DBhndl;
+var DBfile:="ipx800.db";
+func DBinit()
+    print("Init a new DB..\n");
+    pause(2000);
+    var i:=0;
+    var rowNum:=0;
+    if (file_Exists(DBfile)) file_Erase(DBfile);
+    DBhndl:=file_Open(DBfile,'w');
+    var zero:="          ";
+    for (i:=0;i<6500;i++)
+        file_Write(zero,str_Length(zero),DBhndl);
+    next
+    file_Close(DBhndl);
+    pause(1000);
+    DBhndl:=file_Open(DBfile,'a');
+
+    i:=BOARD;
+    // init SYSTEM table
+    DBset(SYSTEM_TBL,SYS_ROWS,SYSTEM_TBL,8); // table SYSTEM has 8 rows (one for each table)
+    DBset(SYSTEM_TBL,SYS_COLUMNS,SYSTEM_TBL,2); // table SYSTEM has 2 cols
+    while (i<=WIDGET)
+        rowNum:=loadConfFile(i);
+        DBset(SYSTEM_TBL, SYS_ROWS, i, rowNum); // update number of rows current tables
+        print("\n");
+        i++;
+    wend
+    file_Close(DBhndl);
+    DBhndl:=file_Open(DBfile,'r');
+endfunc
+
+func DBopen()
+    if (!file_Exists(DBfile)) DBinit();
+    DBhndl:=file_Open(DBfile,'r');
+endfunc
+
+
+func DBclose()
+    if (DBhndl) file_Close(DBhndl);
+endfunc
+
+func DBget(var table, var column, var id)
+    var *types; types:=tbl_types[table];
+    var *colOffsets; colOffsets:=tbl_colOffsets[table];
+    var buff[20];
+    var colType; colType:=types[column];
+    var retVal;
+
+    if (DBhndl)
+        file_Seek(DBhndl, 0,table << 12 + colOffsets[0]*id +colOffsets[column]);
+        file_Read(buff,readSize[colType],DBhndl);
+        var ptr; ptr:=str_Ptr(buff);
+        if (colType == NUMBER || colType == CHAR) str_GetWZ(&ptr,&retVal);
+        if (colType == STRING)
+             retVal:=mem_AllocZ(str_Length(ptr)+1);
+             var tmp; tmp:=str_Ptr(retVal);
+             while (str_Length(ptr))
+                str_PutByte(tmp++, str_GetByte(ptr++));
+             wend
+             str_PutByte(tmp, 0x00);
+        endif
+    endif
+    return retVal;
+endfunc
+
+func DBset(var table, var column, var id, var value)
+    var types; types:=tbl_types[table];
+    var *colOffsets; colOffsets:=tbl_colOffsets[table];
+    var buff[20];
+    var *colType; colType:=types[column];
+    var retVal:=1;
+
+    if (DBhndl)
+        to(buff);
+        if (colType == NUMBER) putnum(DEC, value);
+        if (colType == STRING) putstr(value);
+        to(APPEND); putch(0x00);
+        var ptr; ptr:=str_Ptr(buff);
+        var pos; pos:=table << 12 + colOffsets[0]*id+colOffsets[column];
+        //print("T: ", [DEC] table, " R: ", [DEC] id, " C: ", [DEC] column, " V:",[DEC] value, " Addr: ",[DEC] pos,"\n" );
+        //pause(500);
+        file_Seek(DBhndl, 0, pos);
+        if (!file_Write(buff,str_Length(ptr)+1,DBhndl))
+            touch("ERROR: WRITING");
+            print("T: ", [DEC] table, " R: ", [DEC] id, " C: ", [DEC] column, " V:",[DEC] value, " Addr: ",[DEC] pos,"\n" );
+            retVal:=0;
+        endif
+    endif
+
+    return retVal;
+endfunc
+
+func DBquery(var selectFrom, var where, var is, var rows, var maxRowNum)
+    var col_types; col_types:=tbl_types[table];
+    if (col_types[column] == STRING) return 0;
+
+    var colOffsets; colOffsets:=tbl_colOffsets[table];
+    var retVal:=0; var tmp;
+    var i:=0;
+    if (DBhndl)
+        while (i<tbl_rows[table])
+            if (i == maxRowNum) break;
+            file_Seek(DBhndl, 0, table << 12 + colOffsets[0]*i+colOffsets[column]);
+            file_Read(buff,5,DBhndl);
+            var ptr; ptr:=str_Ptr(buff);
+            str_GetWZ(&buff,&tmp);
+            if (tmp == value) rows[retVal++]:=tmp;
+            i++;
+        wend
+    endif
+    return retVal;
+endfunc
+
+func storeDBConfLine(var tableID, var line, var rowNum)
+    //print("St: ", [STR] line);
+    var ptr; ptr:=str_Ptr(line);
+    var i:=0;
+    var buff[20];
+    var ptrBuff;
+    ptrBuff:=str_Ptr(buff);
+    var parseRes;
+    var parseVec[10];
+    var id;
+    parseRes:= parseLine(line, parseVec);
+    // get current row id
+    if(confContainsID[tableID])
+        str_GetW(&ptr,&id);
+        i++;
+    else id:=rowNum;
+    while(i<=parseRes)
+         var pos; pos:=parseVec[i];
+         //print([DEC] pos, [DEC] ptr );
+         while (pos<parseVec[i+1])
+            //print([CHR] str_GetByte(ptr+pos));
+            str_PutByte(ptrBuff, str_GetByte(ptr+pos));
+            pos++; ptrBuff++;
+         wend
+         //touch();
+         DBset(tableID, i, id, buff);
+         //print([DEC] i);
+         i++;
+    wend
+    DBset(SYSTEM_TBL, SYS_COLUMNS, tableID, i+1-confContainsID[tableID]);
+endfunc
+#ENDIF
+
+

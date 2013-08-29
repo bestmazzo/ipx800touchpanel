@@ -1,0 +1,15 @@
+# model
+0.0=16 # namelength
+
+# view
+1.0=15 # screensaver timeout secs
+1.1=10 # screensaver upd interv sec/10
+1.2=120 # screen sleep out times
+1.3=1500 # window update interval millisec
+
+#control
+2.0=5 # arduino reboot interval mins
+2.1=4 # action dispatch interval sec/10
+2.2=150 # status parse interval millisecs
+
+

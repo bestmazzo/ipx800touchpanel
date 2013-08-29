@@ -1,0 +1,300 @@
+// Image - "home_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: home_icon(x, y);
+#constant home_icon    $media_SetSector(0x0000, 0x0000); media_Image
+
+// Image - "bg_grey" Size 40x40
+// Width  = 40
+// Height = 40
+// Usage: bg_grey(x, y);
+#constant bg_grey    $media_SetSector(0x0000, 0x0011); media_Image
+
+// Image - "bg_red" Size 40x40
+// Width  = 40
+// Height = 40
+// Usage: bg_red(x, y);
+#constant bg_red    $media_SetSector(0x0000, 0x0018); media_Image
+
+// Image - "kitchen_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: kitchen_icon(x, y);
+#constant kitchen_icon    $media_SetSector(0x0000, 0x001F); media_Image
+
+// Image - "lounge_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: lounge_icon(x, y);
+#constant lounge_icon    $media_SetSector(0x0000, 0x0030); media_Image
+
+// Image - "bedroom_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: bedroom_icon(x, y);
+#constant bedroom_icon    $media_SetSector(0x0000, 0x0041); media_Image
+
+// Image - "kidsroom_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: kidsroom_icon(x, y);
+#constant kidsroom_icon    $media_SetSector(0x0000, 0x0052); media_Image
+
+// Image - "bathroom_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: bathroom_icon(x, y);
+#constant bathroom_icon    $media_SetSector(0x0000, 0x0063); media_Image
+
+// Image - "office_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: office_icon(x, y);
+#constant office_icon    $media_SetSector(0x0000, 0x0074); media_Image
+
+// Image - "garage_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: garage_icon(x, y);
+#constant garage_icon    $media_SetSector(0x0000, 0x0085); media_Image
+
+// Image - "device_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: device_icon(x, y);
+#constant device_icon    $media_SetSector(0x0000, 0x0096); media_Image
+
+// Image - "scenarios2_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: scenarios2_icon(x, y);
+#constant scenarios2_icon    $media_SetSector(0x0000, 0x00A7); media_Image
+
+// Image - "outside_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: outside_icon(x, y);
+#constant outside_icon    $media_SetSector(0x0000, 0x00B8); media_Image
+
+// Image - "scenarios1_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: scenarios1_icon(x, y);
+#constant scenarios1_icon    $media_SetSector(0x0000, 0x00C9); media_Image
+
+// Image - "sensors_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: sensors_icon(x, y);
+#constant sensors_icon    $media_SetSector(0x0000, 0x00DA); media_Image
+
+// Image - "plugunknown_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: plugunknown_icon(x, y);
+#constant plugunknown_icon    $media_SetSector(0x0000, 0x00EB); media_Image
+
+// Image - "plugoff_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: plugoff_icon(x, y);
+#constant plugoff_icon    $media_SetSector(0x0000, 0x00FC); media_Image
+
+// Image - "plugon_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: plugon_icon(x, y);
+#constant plugon_icon    $media_SetSector(0x0000, 0x010D); media_Image
+
+// Image - "lightunknown_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: lightunknown_icon(x, y);
+#constant lightunknown_icon    $media_SetSector(0x0000, 0x011E); media_Image
+
+// Image - "lightoff_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: lightoff_icon(x, y);
+#constant lightoff_icon    $media_SetSector(0x0000, 0x012F); media_Image
+
+// Image - "lighton_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: lighton_icon(x, y);
+#constant lighton_icon    $media_SetSector(0x0000, 0x0140); media_Image
+
+// Image - "temperature_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: temperature_icon(x, y);
+#constant temperature_icon    $media_SetSector(0x0000, 0x0151); media_Image
+
+// Image - "pulse_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: pulse_icon(x, y);
+#constant pulse_icon    $media_SetSector(0x0000, 0x0162); media_Image
+
+// Image - "config_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: config_icon(x, y);
+#constant config_icon    $media_SetSector(0x0000, 0x0173); media_Image
+
+// Image - "no_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: no_icon(x, y);
+#constant no_icon    $media_SetSector(0x0000, 0x0184); media_Image
+
+// Image - "refresh_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: refresh_icon(x, y);
+#constant refresh_icon    $media_SetSector(0x0000, 0x0189); media_Image
+
+// Image - "up_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: up_icon(x, y);
+#constant up_icon    $media_SetSector(0x0000, 0x019A); media_Image
+
+// Image - "down_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: down_icon(x, y);
+#constant down_icon    $media_SetSector(0x0000, 0x01AB); media_Image
+
+// Image - "top_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: top_icon(x, y);
+#constant top_icon    $media_SetSector(0x0000, 0x01BC); media_Image
+
+// Image - "bottom_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: bottom_icon(x, y);
+#constant bottom_icon    $media_SetSector(0x0000, 0x01CD); media_Image
+
+// Image - "shutter_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: shutter_icon(x, y);
+#constant shutter_icon    $media_SetSector(0x0000, 0x01DE); media_Image
+
+// Image - "ok_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: ok_icon(x, y);
+#constant ok_icon    $media_SetSector(0x0000, 0x01EF); media_Image
+
+// Image - "office_small_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: office_small_icon(x, y);
+#constant office_small_icon    $media_SetSector(0x0000, 0x01F4); media_Image
+
+// Image - "save_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: save_icon(x, y);
+#constant save_icon    $media_SetSector(0x0000, 0x01F9); media_Image
+
+// Image - "warning_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: warning_icon(x, y);
+#constant warning_icon    $media_SetSector(0x0000, 0x020A); media_Image
+
+// Image - "statunknown_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: statunknown_icon(x, y);
+#constant statunknown_icon    $media_SetSector(0x0000, 0x020F); media_Image
+
+// Image - "statoff_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: statoff_icon(x, y);
+#constant statoff_icon    $media_SetSector(0x0000, 0x0214); media_Image
+
+// Image - "staton_icon" Size 32x32
+// Width  = 32
+// Height = 32
+// Usage: staton_icon(x, y);
+#constant staton_icon    $media_SetSector(0x0000, 0x0219); media_Image
+
+// Image - "humidity_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: humidity_icon(x, y);
+#constant humidity_icon    $media_SetSector(0x0000, 0x021E); media_Image
+
+// Image - "voltsens_icon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: voltsens_icon(x, y);
+#constant voltsens_icon    $media_SetSector(0x0000, 0x022F); media_Image
+
+// Image - "moon" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: moon(x, y);
+#constant moon    $media_SetSector(0x0000, 0x0240); media_Image
+
+// Image - "sun" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: sun(x, y);
+#constant sun    $media_SetSector(0x0000, 0x0251); media_Image
+
+// Image - "heatoff" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: heatoff(x, y);
+#constant heatoff    $media_SetSector(0x0000, 0x0262); media_Image
+
+// Image - "heaton" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: heaton(x, y);
+#constant heaton    $media_SetSector(0x0000, 0x0273); media_Image
+
+// Image - "tvunknown.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: tvunknown.png(x, y);
+#constant tvunknown.png    $media_SetSector(0x0000, 0x0284); media_Image
+
+// Image - "tvoff.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: tvoff.png(x, y);
+#constant tvoff.png    $media_SetSector(0x0000, 0x0295); media_Image
+
+// Image - "tvon.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: tvon.png(x, y);
+#constant tvon.png    $media_SetSector(0x0000, 0x02A6); media_Image
+
+// Image - "btnunknown.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: btnunknown.png(x, y);
+#constant btnunknown.png    $media_SetSector(0x0000, 0x02B7); media_Image
+
+// Image - "btnoff.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: btnoff.png(x, y);
+#constant btnoff.png    $media_SetSector(0x0000, 0x02C8); media_Image
+
+// Image - "btnon.png" Size 64x64
+// Width  = 64
+// Height = 64
+// Usage: btnon.png(x, y);
+#constant btnon.png    $media_SetSector(0x0000, 0x02D9); media_Image
+

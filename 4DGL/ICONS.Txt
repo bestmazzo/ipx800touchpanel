@@ -1,0 +1,658 @@
+=====================================================
+SGC (Serial Graphics Controller) PLATFORM OUTPUT FILE
+=====================================================
+
+*******************************************************
+* This build option is not applicable to Goldelox SGC *
+*******************************************************
+
+---------------------------------------------------------------------------------------
+File "home_64.png" (home_icon)
+Sector Address 0x000000
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00000000)
+
+---------------------------------------------------------------------------------------
+File "ui-bg_diagonals-thick_20_666666_40x40.png" (bg_grey)
+Sector Address 0x000011
+X = 0 Y = 0 Width = 40 Height = 40 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x22, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00002200)
+
+---------------------------------------------------------------------------------------
+File "ui-bg_diagonals-thick_18_b81900_40x40.png" (bg_red)
+Sector Address 0x000018
+X = 0 Y = 0 Width = 40 Height = 40 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00003000)
+
+---------------------------------------------------------------------------------------
+File "kitchen_64.png" (kitchen_icon)
+Sector Address 0x00001F
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00003E00)
+
+---------------------------------------------------------------------------------------
+File "tvlounge_64.png" (lounge_icon)
+Sector Address 0x000030
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00006000)
+
+---------------------------------------------------------------------------------------
+File "bedroom_64.png" (bedroom_icon)
+Sector Address 0x000041
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x82, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00008200)
+
+---------------------------------------------------------------------------------------
+File "kidsroom_64.png" (kidsroom_icon)
+Sector Address 0x000052
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA4, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0000A400)
+
+---------------------------------------------------------------------------------------
+File "bathroom_64.png" (bathroom_icon)
+Sector Address 0x000063
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC6, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0000C600)
+
+---------------------------------------------------------------------------------------
+File "office_64.png" (office_icon)
+Sector Address 0x000074
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE8, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0000E800)
+
+---------------------------------------------------------------------------------------
+File "garage_64.png" (garage_icon)
+Sector Address 0x000085
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x0A, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00010A00)
+
+---------------------------------------------------------------------------------------
+File "info_64.png" (device_icon)
+Sector Address 0x000096
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x2C, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00012C00)
+
+---------------------------------------------------------------------------------------
+File "start-here-2.png" (scenarios2_icon)
+Sector Address 0x0000A7
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x4E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00014E00)
+
+---------------------------------------------------------------------------------------
+File "garden_64.png" (outside_icon)
+Sector Address 0x0000B8
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x70, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00017000)
+
+---------------------------------------------------------------------------------------
+File "blockdevice-2.png" (scenarios1_icon)
+Sector Address 0x0000C9
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x92, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00019200)
+
+---------------------------------------------------------------------------------------
+File "office-chart-ring.png" (sensors_icon)
+Sector Address 0x0000DA
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xB4, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0001B400)
+
+---------------------------------------------------------------------------------------
+File "undefined_64.png" (plugunknown_icon)
+Sector Address 0x0000EB
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xD6, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0001D600)
+
+---------------------------------------------------------------------------------------
+File "0_64.png" (plugoff_icon)
+Sector Address 0x0000FC
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xF8, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0001F800)
+
+---------------------------------------------------------------------------------------
+File "100_64.png" (plugon_icon)
+Sector Address 0x00010D
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x1A, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00021A00)
+
+---------------------------------------------------------------------------------------
+File "undefined_64 (2).png" (lightunknown_icon)
+Sector Address 0x00011E
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x3C, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00023C00)
+
+---------------------------------------------------------------------------------------
+File "0_64 (2).png" (lightoff_icon)
+Sector Address 0x00012F
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x5E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00025E00)
+
+---------------------------------------------------------------------------------------
+File "100_64 (2).png" (lighton_icon)
+Sector Address 0x000140
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x80, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00028000)
+
+---------------------------------------------------------------------------------------
+File "undefined_64 (5).png" (temperature_icon)
+Sector Address 0x000151
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xA2, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0002A200)
+
+---------------------------------------------------------------------------------------
+File "processing_ffffff_64.gif" (pulse_icon)
+Sector Address 0x000162
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xC4, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0002C400)
+
+---------------------------------------------------------------------------------------
+File "customize_64.png" (config_icon)
+Sector Address 0x000173
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xE6, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0002E600)
+
+---------------------------------------------------------------------------------------
+File "red_indicator_32.png" (no_icon)
+Sector Address 0x000184
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x08, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00030800)
+
+---------------------------------------------------------------------------------------
+File "view-refresh-5.png" (refresh_icon)
+Sector Address 0x000189
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x12, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00031200)
+
+---------------------------------------------------------------------------------------
+File "70_64.png" (up_icon)
+Sector Address 0x00019A
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x34, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00033400)
+
+---------------------------------------------------------------------------------------
+File "30_64.png" (down_icon)
+Sector Address 0x0001AB
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x56, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00035600)
+
+---------------------------------------------------------------------------------------
+File "100_64 (3).png" (top_icon)
+Sector Address 0x0001BC
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x78, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00037800)
+
+---------------------------------------------------------------------------------------
+File "0_64 (3).png" (bottom_icon)
+Sector Address 0x0001CD
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x9A, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00039A00)
+
+---------------------------------------------------------------------------------------
+File "undefined_64 (3).png" (shutter_icon)
+Sector Address 0x0001DE
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xBC, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0003BC00)
+
+---------------------------------------------------------------------------------------
+File "green_indicator_32.png" (ok_icon)
+Sector Address 0x0001EF
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xDE, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0003DE00)
+
+---------------------------------------------------------------------------------------
+File "office_32.png" (office_small_icon)
+Sector Address 0x0001F4
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xE8, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0003E800)
+
+---------------------------------------------------------------------------------------
+File "document-save-2.png" (save_icon)
+Sector Address 0x0001F9
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xF2, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0003F200)
+
+---------------------------------------------------------------------------------------
+File "warning_32.png" (warning_icon)
+Sector Address 0x00020A
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x14, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00041400)
+
+---------------------------------------------------------------------------------------
+File "unknown_32.png" (statunknown_icon)
+Sector Address 0x00020F
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x1E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00041E00)
+
+---------------------------------------------------------------------------------------
+File "grey_indicator_32.png" (statoff_icon)
+Sector Address 0x000214
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x28, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00042800)
+
+---------------------------------------------------------------------------------------
+File "save_32.png" (staton_icon)
+Sector Address 0x000219
+X = 0 Y = 0 Width = 32 Height = 32 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x32, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00043200)
+
+---------------------------------------------------------------------------------------
+File "undefined_64 (4).png" (humidity_icon)
+Sector Address 0x00021E
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x3C, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00043C00)
+
+---------------------------------------------------------------------------------------
+File "undefined_64 (6).png" (voltsens_icon)
+Sector Address 0x00022F
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x5E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00045E00)
+
+---------------------------------------------------------------------------------------
+File "moon.png" (moon)
+Sector Address 0x000240
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x80, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00048000)
+
+---------------------------------------------------------------------------------------
+File "sun.png" (sun)
+Sector Address 0x000251
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xA2, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0004A200)
+
+---------------------------------------------------------------------------------------
+File "heatoff.png" (heatoff)
+Sector Address 0x000262
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xC4, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0004C400)
+
+---------------------------------------------------------------------------------------
+File "heaton.png" (heaton)
+Sector Address 0x000273
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xE6, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0004E600)
+
+---------------------------------------------------------------------------------------
+File "tvunknown.png" (tvunknown.png)
+Sector Address 0x000284
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x08, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00050800)
+
+---------------------------------------------------------------------------------------
+File "tvoff.png" (tvoff.png)
+Sector Address 0x000295
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x2A, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00052A00)
+
+---------------------------------------------------------------------------------------
+File "tvon.png" (tvon.png)
+Sector Address 0x0002A6
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x4C, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00054C00)
+
+---------------------------------------------------------------------------------------
+File "btnunknown.png" (btnunknown.png)
+Sector Address 0x0002B7
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x6E, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00056E00)
+
+---------------------------------------------------------------------------------------
+File "btnoff.png" (btnoff.png)
+Sector Address 0x0002C8
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x90, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x00059000)
+
+---------------------------------------------------------------------------------------
+File "btnon.png" (btnon.png)
+Sector Address 0x0002D9
+X = 0 Y = 0 Width = 64 Height = 64 Bits = 16
+
+Display Image from Memory Card (Serial Command):
+Syntax:
+@, m, "Filename", terminator, x, y, imagePos(xhi) imagePos(hi), imagePos(mid), imagePos(lo)
+Picaso Data:
+0x40, 0x6D, "ICONS.Gci", 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0xB2, 0x00
+4DSL command:
+FATImage("ICONS.Gci", 0, 0, 0x0005B200)
+

@@ -1,0 +1,297 @@
+/*
+  using timers:
+  TIMER0 -> scenario actions dispatch
+  TIMER1 -> window auto update
+  TIMER2 -> screensaver & screen sleep
+  TIMER3 ->
+  TIMER4 -> trigger scenario run
+  TIMER5 ->
+  TIMER6 ->
+  TIMER7 -> parseStatus() : reads and parses COM0 inbound messages + tests triggers
+
+*/
+// images index
+#CONST
+    HOME
+    BG_GREY
+    BG_RED
+    KITCHEN
+    LOUNGE
+    BEDROOM
+    KIDS
+    BATHROOM
+    OFFICE
+    GARAGE
+    DEVICE_ICON
+    SCEN2
+    OUTSIDE
+    SCEN1
+    SENSORS
+    PLUG_UNKNOWN
+    PLUG_OFF
+    PLUG_ON
+    LIGHT_UNKNOWN
+    LIGHT_OFF
+    LIGHT_ON
+    TEMPERATURESENS
+    PULSE_ICON
+    CONFIG_ICON
+    NO
+    REFRESH
+    UP_ICON
+    DOWN_ICON
+    TOP_ICON
+    BOTTOM_ICON
+    SHUTTER_ICON
+    OK
+    OFFICE_SMALL
+    SAVE
+    WARNING
+    STAT_UNKNOWN
+    STAT_OFF
+    STAT_ON
+    HUMIDITYSENS
+    VOLTSENS
+    MOON
+    SUN
+    HEAT_OFF
+    HEAT_ON
+    TV_UNKNOWN
+    TV_OFF
+    TV_ON
+    BTN_UNKNOWN
+    BTN_OFF
+    BTN_ON
+#END
+
+var *IMGhndl;
+
+
+func setTimer(var timer, var interval, var function)
+    sys_SetTimer(timer,interval);
+    sys_SetTimerEvent(timer,function);
+endfunc
+
+func sleepMode()
+  gfx_Set(CONTRAST,0);
+endfunc
+
+func arduinoReboot()
+    pin_HI(IO1_PIN);
+    to(COM0);
+    putstr("reboot()\n");
+    pause(200);
+    pin_LO(IO1_PIN);
+endfunc
+
+func screenOn()
+    gfx_Set(CONTRAST,1);
+    screenSaverActive:=0;
+
+    setTimer(TIMER1,configView[WIN_UPD_INTV],aWindow.timerEvent); //reenable window update
+    sys_SetTimer(TIMER2,configView[SCRSAVER_TIMEOUT]*1000); //reenable screensaver timeout
+endfunc
+
+func putConfig()
+    var i:=0;
+
+    gfx_Panel(PANEL_SUNKEN,30, 80, 260, 80, WHITE);
+    gfx_Set(TRANSPARENCY,ON);
+
+    img(SAVE,35,100,0);
+    if (loadConfFile(ARDUINO_CFG,1))
+        img(OK,90+i*26,100,0);
+    else
+        img(NO,90+i*26,100,0);
+    endif
+    var tmp;
+    while( i<numVar[BOARDS_CFG])
+//        com_TXbufferHold(ON);
+        while(com_TXcount()) ;
+
+        to(COM0); print("poll(",[DEC] i,",1,");
+
+        tmp:=0;
+
+        var *boardIP; boardIP:=getConfArray(BOARDS_CFG,B_IP);
+        while (tmp<2)
+            var dat; dat:=boardIP[i*2+tmp];
+            to(COM0); print([DEC] HIbyte(dat), [CHR] '.', [DEC] LObyte(dat));
+            if (tmp == 0)
+                to(COM0); putch('.');
+            endif
+            tmp++;
+        wend
+       to(COM0); putch(")\n");
+//     com_TXbufferHold(OFF);
+       // gfx_Set(TRANSPARENCY,ON);
+        img(OK,90+i*26,100,0);
+
+       while(com_TXcount());
+       pause(800);
+    i++;
+    wend
+
+
+    to(COM0); putstr("save()\n");
+    pause(1000);
+    gfx_Set(TRANSPARENCY,OFF);
+
+endfunc
+
+var pingCNT:=0;
+func pingArduino()
+sys_EventsPostpone();
+ pingCNT++;
+ if (pingCNT == configControl[ARDUINOPING_INTV])
+     arduinoReboot();
+     pingCNT:=0;
+ endif
+ sys_SetTimer(TIMER5,60000);
+ sys_EventsResume();
+endfunc
+
+func reboot()
+ arduinoReboot();
+ file_Unmount();
+ gfx_Set(CONTRAST,0);
+ SystemReset();
+endfunc
+
+var screenSaverActive:=0;
+func screensaver()
+sys_EventsPostpone();
+    screenSaverActive++;
+        sys_SetTimer(TIMER1,0); //block window update
+        gfx_Cls();
+//        gfx_Panel(PANEL_SUNKEN,0, 0, 320, 240, BLACK);
+//        pause(100);
+        gfx_MoveTo(ABS(RAND()%200)-40,ABS(RAND()%200));
+        txt_FontID(FONT3);
+        pokeW(TEXT_COLOUR,GREEN); pokeW(TEXT_BACKGROUND,BLACK);
+        pokeW(TEXT_HEIGHT,6); pokeW(TEXT_WIDTH,6);
+        print([DEC2Z] time[0], [CHR] ':', [DEC2Z] time[1]);
+        pokeW(TEXT_HEIGHT,1); pokeW(TEXT_WIDTH,1);
+        if (screenSaverActive > configView[SLEEP_TIMEOUT])
+            sleepMode();
+        else sys_SetTimer(TIMER2,configView[SCRSAVER_UPD_INTV]*100);
+    sys_EventsResume();
+endfunc
+
+func trigger()
+    sys_EventsPostpone();
+    queueScenario(-'c',-1);
+    sys_SetTimer(TIMER4,configControl[TRIGGER_TEST_INTV]*1000);
+    sys_EventsResume();
+endfunc
+
+func img(var id, var x, var y, var status)
+  if (IMGhndl)
+    img_SetPosition(IMGhndl, id, x, y);                   // set the checkout box position
+    if (status == 1) img_Lighten(IMGhndl,id);
+    if (status == -1) img_Darken(IMGhndl,id);
+    img_Show(IMGhndl,id);
+  endif
+endfunc
+
+#IF USING DEBUG
+func printField(var table, var col, var id)
+    var type; type:=getType(table, col);
+    if (type == )
+    else if (type == )
+    endif
+endfunc
+
+func debugNames()
+var i:=0;
+var p:=50000;
+
+
+// boards
+gfx_Cls();
+putstr("BOARDS\n");
+while (i<numVar[BOARDS_CFG])
+ print([DEC] i, [CHR] ' ', [STR] boardName[i], [CHR] '\n');
+ var      tmp:=0;
+
+
+        while (tmp<2)
+            var dat; dat:=boardIP[i*2+tmp];
+            print([DEC] LObyte(dat), [CHR] '.', [DEC] HIbyte(dat));
+            if (tmp == 0)
+                putch('.');
+            endif
+            tmp++;
+        wend
+
+ putch('\n');
+ i++;
+wend
+pause(p);
+gfx_Cls();
+/*
+// windows
+putstr("WINDOWS\n");
+i:=0;
+while (i<numVar[WINDOWS_CFG])
+ print([DEC] i, " ", [STR] windowName[i],"\n");
+ i++;
+wend
+pause(p);
+
+gfx_Cls();
+//devices
+putstr("DEVICES\n");
+ i:=0;
+while(i<numVar[DEVICES_CFG])
+ print([DEC] i, " B:", [DEC] deviceBoard[i]);
+ print(" U:", [CHR] deviceUsage[i]);
+ print(" I:", [DEC] deviceIndex[i]);
+ print(" E:", [DEC] deviceExtra[i]);
+ print(" ", [STR] deviceName[i], "\n");
+ i++;
+ wend
+pause(p);
+
+//conditions
+putstr("CONDITIONS\n");
+ i:=0;
+while(i<numVar[CONDITIONS_CFG])
+ print([DEC] i, " aT:", [CHR] HIbyte(conditionItemA[i]));
+ print(" aV:", [DEC] LObyte(conditionItemA[i]));
+ print(" o:", [CHR] conditionOperator[i]);
+ print(" bT:", [CHR] HIbyte(conditionItemB[i]));
+ print(" bV:", [DEC] LObyte(conditionItemB[i]));
+ putch('\n');
+ i++;
+ wend
+pause(p);
+
+gfx_Cls();
+i:=0;
+putstr("WIDGETS\n");
+while (i<numVar[WIDGETS_CFG])
+ print([DEC] i," W:",[DEC] widgetWindow[i]," At:",[CHR] widgetActType[i], " Aid:", [DEC] widgetActArg[i],"\n");
+ i++;
+wend
+pause(p);
+
+gfx_Cls();
+i:=0;
+putstr("SCENARIOS\n");
+while (i<numVar[SCENARIOS_CFG])
+ print([DEC] i," I:", [DEC]scenarioIcon[i], " ", [STR] scenarioName[i],"\n");
+ i++;
+wend
+pause(p);
+gfx_Cls();
+i:=0;
+
+putstr("ACTIONS\n");
+while (i<numVar[ACTIONS_CFG])
+ print([DEC] i," S:", [DEC] actionScenario[i]," T:", [CHR] actionType[i], " A:", [DEC] actionArg[i], "\n");
+ i++;
+wend
+pause(p); */
+endfunc
+#ENDIF

@@ -1,0 +1,18 @@
+# ID,iconID, Name #Comments
+# -1 means Main Window
+# -2 means config window
+# -115 means shutter list
+# -108 means light list
+# -97 means appliance list
+# -114 means reboot!
+# -83 means "save config to arduino"
+
+0,-1,Cucina #do not change anything but the roomname translation
+1,-2,Salotto #same as above
+2,-3,Camerona #same as above
+3,-4,Camerina #same as above
+4,-5,Bagno #
+5,-6,Ripostiglio #
+6,-7,Servizio #
+7,-9,Scenarii #
+8,-8,Devices #

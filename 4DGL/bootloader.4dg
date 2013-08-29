@@ -1,0 +1,30 @@
+#platform "uLCD-32PT_GFX2"
+
+#inherit "4DGL_16bitColours.fnc"
+
+#MODE RUNFLASH      // this prog intended to be 'front end' and run from FLASH
+
+var stable:=  "IPX800ts.4XE";
+var testing:= "test.4XE";
+
+func main()
+    var touching:=0;
+    gfx_Set(SCREEN_MODE,LANDSCAPE) ;
+    touch_Set(TOUCH_ENABLE);
+    putstr("Bootloader v.2.1.1 \n Avail. mem: "); putnum(DEC, mem_Heap());
+    while(!file_Mount())
+        txt_MoveCursor(1,0);
+        putstr("Insert uSD");
+    wend
+    txt_MoveCursor(1,0); print("uSD found!\n");
+    sys_SetTimer(TIMER0,1000);
+    while(sys_GetTimer(TIMER0))
+        if (touch_Get(TOUCH_STATUS) == TOUCH_PRESSED) touching:=1;
+    wend
+    if (touching) print("Test mode Enabled");
+    pause(500);
+    if(file_Exists(testing) && touching )
+        file_Exec(testing, 0);
+    else file_Exec(stable,0);
+
+endfunc

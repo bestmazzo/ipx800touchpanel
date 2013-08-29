@@ -1,0 +1,35 @@
+# windowID,type(d,w,s), itemID
+# begin predefined widgets
+-115,s,-117 # shutter up
+-115,s,-116 # shutter top 
+-115,s,-100 # shutter down
+-115,s,-98 # shutter bottom
+# following predefined widgets aren't used yet
+# they'd be needed if we wnat popups even for lights, appliances and pulseonly devices
+-108,s,-48 # light off
+-108,s,-49 # light on
+-108,s,-50 # light switch
+-108,s,-112 # light pulse
+-97,s,-48 # appliance off
+-97,s,-49 # appliance on
+-97,s,-50 # appliance switch
+-97,s,-112 # appliance pulse
+-112,s,-112 # pulseonly device pulse
+# end predefined widgets
+#main window widgets
+
+-1,d,0
+-1,d,1
+-1,d,2
+-1,d,3
+-1,d,4
+-1,d,5
+-1,d,6
+-1,d,7
+-1,d,8
+
+
+
+#config widgets
+-2,w,-83
+-2,w,-114

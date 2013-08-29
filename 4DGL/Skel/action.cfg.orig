@@ -1,0 +1,38 @@
+# scenarioID,type, arg, condition
+# type: 1 (on) 0(off) 2(switch) Down Up Top Bottom Pulse Wait Scenario
+# arg...
+
+# begin predefined actions
+# triggers
+-99,0,0,2
+
+# generic shutter down scenario
+-100,d,0,1#pulse down
+
+# generic shutter up action
+-117,u,0,1#pulse up
+
+# generic shutter bottom action  
+-98,D,0,1
+-98,w,300,1  
+-98,0,0,1 
+
+# generic shutter top action
+-116,U,0,1
+-116,w,300,1
+-116,0,0,1
+
+# turn off scenario (change sequence to customize)
+-48,0,0,1
+# turn on
+-49,1,0,1
+#switch
+-50,2,0,1
+#pulse
+-112,p,0,1
+
+
+# generic sub-scenario call
+-115,s,0,1
+
+

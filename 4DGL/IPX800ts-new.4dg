@@ -1,0 +1,17 @@
+#platform "uLCD-32PT_GFX2"
+
+#inherit "4DGL_16bitColours.fnc"
+#inherit "IPX800ts-db.lib"
+
+func main()
+    gfx_ScreenMode(LANDSCAPE);
+    txt_FGcolour(BLACK);
+    txt_BGcolour(WHITE);
+    txt_MoveCursor(0,0);
+    print("DB Test Program\n\r");
+ //   pause(5000);
+    DBinit();
+
+    DBclose();
+
+endfunc
